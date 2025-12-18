@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>上门宠物喂养服务说明</title>
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            /* 品牌主色：温暖橙 */
+            --primary-color: #FF8C42; 
+            --primary-light: #FFF0E5;
+            --bg-color: #F8F9FB;
+            --white: #FFFFFF;
+            --text-main: #1D2129;
+            --text-sub: #86909C;
+            --tag-bg: #E8F3FF;
+            --tag-text: #165DFF;
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: calc(80px + var(--safe-bottom));
+        }
+
+        /* --- 1. 头部纯文本结构 --- */
+        .text-header {
+            background: var(--white);
+            padding: 30px 20px 20px;
+            margin-bottom: 12px;
+        }
+        
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #000;
+            margin: 0 0 12px 0;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .header-tags { display: flex; gap: 8px; }
+        .header-tag {
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* --- 2. 场景需求模块 --- */
+        .scenario-section {
+            background: var(--white);
+            margin: 0 16px 12px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .section-big-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #000;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .scenario-item {
+            background: #FAFAFA;
+            border-radius: 12px;
+            padding: 16px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .s-icon { font-size: 28px; margin-bottom: 8px; }
+        .s-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
+        .s-desc { font-size: 11px; color: #999; }
+
+        /* --- 通用卡片样式 --- */
+        .card {
+            background: var(--white);
+            margin: 12px 16px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .card-header {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+        }
+        .card-header::before {
+            content: ''; width: 4px; height: 16px;
+            background: var(--primary-color);
+            margin-right: 8px; border-radius: 2px;
+        }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex; background: #F7F8FA;
+            border-radius: 8px; padding: 4px; margin-bottom: 20px;
+        }
+        .tab-item {
+            flex: 1; text-align: center; padding: 8px 0;
+            font-size: 14px; color: #666; border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .tab-item.active {
+            background: var(--white); color: var(--primary-color);
+            font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .detail-list .item { margin-bottom: 16px; display: flex; align-items: flex-start; }
+        .detail-list .dot {
+            min-width: 6px; height: 6px; background: var(--primary-color);
+            border-radius: 50%; margin-top: 8px; margin-right: 10px;
+        }
+        .detail-list .text { font-size: 14px; line-height: 1.6; color: #444; }
+        .detail-list b { color: #000; font-weight: 600; display: block; margin-bottom: 4px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeUp 0.3s; }
+
+        /* --- 工具 Grid --- */
+        .tools-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .tool { text-align: center; }
+        .tool-icon {
+            width: 44px; height: 44px; background: var(--primary-light);
+            border-radius: 12px; margin: 0 auto 6px;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .tool-name { font-size: 12px; color: #666; }
+
+        /* --- SOP 流程 --- */
+        .sop-wrap { padding-left: 8px; }
+        .sop-item {
+            position: relative; padding-left: 24px; padding-bottom: 24px;
+            border-left: 1px dashed #DDD;
+        }
+        .sop-item:last-child { border-left: none; padding-bottom: 0; }
+        .sop-item::before {
+            content: ''; position: absolute; left: -5px; top: 4px;
+            width: 10px; height: 10px; background: var(--primary-color);
+            border-radius: 50%; border: 2px solid var(--white);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+        .sop-title { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 4px; }
+        .sop-desc { font-size: 13px; color: #666; line-height: 1.5; }
+
+        /* --- 咨询入口 (嵌入式) --- */
+        .consult-inner {
+            margin-top: 24px;
+            background: #F8F9FA; /* 极浅灰，比之前的蓝色更融合 */
+            border: 1px solid #EEEEEE;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .consult-inner-text {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .consult-inner-btn {
+            background: #FFFFFF;
+            color: #333;
+            border: 1px solid #DDDDDD;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        /* --- 交易验收模块 --- */
+        .info-block {
+            background: #FAFAFA;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .info-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .info-text { font-size: 13px; color: #666; line-height: 1.6; }
+
+        /* --- 免责 --- */
+        .warn-box {
+            background: #FFF5F5; border: 1px solid #FFECEC;
+            border-radius: 8px; padding: 15px;
+        }
+        .warn-title { color: #D93025; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+        .warn-list li {
+            font-size: 12px; color: #666; margin-bottom: 6px;
+            list-style: disc; margin-left: 16px;
+        }
+
+        /* --- 底部吸底栏 --- */
+        .footer-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--white);
+            padding: 10px 20px;
+            padding-bottom: calc(10px + var(--safe-bottom));
+            display: flex; align-items: center; gap: 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+            z-index: 999;
+        }
+        
+        .kf-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #4E5969; font-size: 10px; min-width: 40px; cursor: pointer;
+        }
+        .kf-icon { font-size: 22px; margin-bottom: 2px; }
+
+        .book-btn {
+            flex: 1;
+            background: var(--primary-color); 
+            color: var(--white);
+            height: 44px;
+            border: none;
+            border-radius: 22px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 140, 66, 0.3);
+        }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:translateY(0);} }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. 头部纯文本区域 -->
+    <div class="text-header">
+        <h1 class="page-title">宠物上门喂养服务说明</h1>
+        <div class="page-subtitle">标准化预期 · 避免争议 · 社区互助</div>
+        <div class="header-tags">
+            <span class="header-tag">身份核验</span>
+            <span class="header-tag">完工验收</span>
+            <span class="header-tag">无隐形消费</span>
+        </div>
+    </div>
+
+    <!-- 2. 场景需求模块 -->
+    <div class="scenario-section">
+        <div class="section-big-title">什么时候需要找宠物喂养?</div>
+        <div class="scenario-grid">
+            <div class="scenario-item">
+                <div class="s-icon">✈️</div>
+                <div class="s-title">出差旅行</div>
+                <div class="s-desc">不仅是喂食 更是陪伴</div>
+            </div>
+            <div class="scenario-item">
+                <div class="s-icon">💼</div>
+                <div class="s-title">加班晚归</div>
+                <div class="s-desc">拒绝毛孩子独自挨饿</div>
+            </div>
+            <div class="scenario-item">
+                <div class="s-icon">🏥</div>
+                <div class="s-title">生病休养</div>
+                <div class="s-desc">专业照护 分担压力</div>
+            </div>
+            <div class="scenario-item">
+                <div class="s-icon">🛋️</div>
+                <div class="s-title">假期宅家</div>
+                <div class="s-desc">偶尔偷懒 我们代劳</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 详细服务内容 -->
+    <div class="card">
+        <div class="card-header">服务内容与操作标准</div>
+        
+        <div class="tabs">
+            <div class="tab-item active" onclick="switchTab(0)">🐱 猫咪</div>
+            <div class="tab-item" onclick="switchTab(1)">🐶 狗狗</div>
+            <div class="tab-item" onclick="switchTab(2)">🐰 异宠</div>
+        </div>
+
+        <div class="tab-content active" id="c0">
+            <div class="detail-list">
+                <div class="item"><div class="dot"></div><div class="text"><b>饮食照料：</b>清洗食具（无洗洁精残留），按指定刻度添加猫粮/饮用水，喂食罐头需捣碎。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>铲屎清洁：</b>彻底清理结团猫砂，补足新砂，清扫猫砂盆周边地面，垃圾打包带走。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>健康监测：</b>观察眼鼻分泌物、排泄物形态（软便/拉稀），精神状态并拍照反馈。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>安全互动：</b>检查门窗关闭情况；不抗拒前提下陪玩逗猫棒，若猫咪躲避不强行互动。</div></div>
+            </div>
+        </div>
+        <div class="tab-content" id="c1">
+            <div class="detail-list">
+                <div class="item"><div class="dot"></div><div class="text"><b>户外遛狗：</b>必须全程佩戴牵引绳（严禁户外松绳），避开危险区域，清理排泄物。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>归家护理：</b>进门前仔细擦拭四肢，检查体表是否有草屑、寄生虫或外伤。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>饮食管理：</b>遛后休息片刻再喂水喂食，清洗食具，避免剧烈运动后立即进食。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>环境维护：</b>若有轻微拆家行为进行简单收拾，离场前确认水电/门窗安全。</div></div>
+            </div>
+        </div>
+        <div class="tab-content" id="c2">
+            <div class="detail-list">
+                <div class="item"><div class="dot"></div><div class="text"><b>严格按需：</b>鉴于异宠习性差异大，严格按照雇主提供的图文/视频指南操作。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>环境监测：</b>拍照反馈温度/湿度计数值，清理垫材/粪便。</div></div>
+                <div class="item"><div class="dot"></div><div class="text"><b>防逃逸：</b>重点检查笼具锁扣是否牢固，防止小宠越狱。</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 工具与装备 -->
+    <div class="card">
+        <div class="card-header">专业工具与装备</div>
+        <div class="tools-row">
+            <div class="tool"><div class="tool-icon">🧤</div><div class="tool-name">手套/鞋套</div></div>
+            <div class="tool"><div class="tool-icon">🧴</div><div class="tool-name">消毒喷雾</div></div>
+            <div class="tool"><div class="tool-icon">🗑️</div><div class="tool-name">专用垃圾袋</div></div>
+            <div class="tool"><div class="tool-icon">📸</div><div class="tool-name">拍摄设备</div></div>
+        </div>
+        <p style="font-size:12px; color:#999; margin-top:12px; background:#F9F9F9; padding:8px; border-radius:4px;">
+            * 服务红线：全程影像留痕；严禁进入非服务区；生活垃圾带离。
+        </p>
+    </div>
+
+    <!-- 5. 详细流程 SOP -->
+    <div class="card">
+        <div class="card-header">服务流程 (SOP)</div>
+        <div class="sop-wrap">
+            <div class="sop-item">
+                <div class="sop-title">1. 行前沟通</div>
+                <div class="sop-desc">确认习性、钥匙/密码交接方式。双方协商上门时间（非30分钟极速达）。</div>
+            </div>
+            <div class="sop-item">
+                <div class="sop-title">2. 进门服务 (全程留痕)</div>
+                <div class="sop-desc">穿戴装备消毒。进门先检查门窗及宠物，拍摄环境全景。执行喂养操作。</div>
+            </div>
+            <div class="sop-item">
+                <div class="sop-title">3. 离场收尾</div>
+                <div class="sop-desc">打包带走垃圾。<b>再次确认门窗已锁</b>，水电无异常。归还钥匙。</div>
+            </div>
+            <div class="sop-item">
+                <div class="sop-title">4. 交易与验收</div>
+                <div class="sop-desc">上传完整服务记录（视频/照片）。雇主需在24小时内确认验收。</div>
+            </div>
+        </div>
+
+        <!-- 嵌入的咨询入口 -->
+        <div class="consult-inner">
+            <div class="consult-inner-text">
+                <span style="font-size:18px;">💬</span> 对流程或细节有疑问？
+            </div>
+            <button class="consult-inner-btn">联系服务者</button>
+        </div>
+    </div>
+
+    <!-- 6. 交易、验收与售后 -->
+    <div class="card">
+        <div class="card-header">交易、验收与售后说明</div>
+        
+        <div class="info-block">
+            <div class="info-title">💰 费用构成</div>
+            <div class="info-text">
+                • <b>基础服务费：</b>按次/小时计费。<br>
+                • <b>附加费：</b>多只宠物、法定节假日、无电梯高楼层、超服务距离等需按约定加收。
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-title">✅ 验收标准</div>
+            <div class="info-text">
+                服务者需上传以下凭证视为完工：<br>
+                1. 进门全屋/宠物状态照；<br>
+                2. 食盆换水/换粮前后对比照；<br>
+                3. 铲屎成果及猫砂盆周边清洁照；<br>
+                4. 离场锁门视频。
+            </div>
+        </div>
+
+        <div class="info-block" style="margin-bottom:0;">
+            <div class="info-title">🛡️ 售后与纠纷</div>
+            <div class="info-text">
+                • <b>关于重做：</b>不满意“重做”非平台强制义务，仅在服务者个人承诺时生效。<br>
+                • <b>平台介入：</b>平台提供客服协助调解纠纷，对违规服务者进行处罚，但不承担连带赔偿责任。<br>
+                • <b>保险说明：</b>暂不提供商业保险。
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. 免责与说明 -->
+    <div class="card">
+        <div class="card-header" style="color:#D93025;">非服务范围与免责</div>
+        <div class="warn-box">
+            <div class="warn-title">请仔细阅读以下条款：</div>
+            <ul class="warn-list" style="margin:0; padding-left:0;">
+                <li><b>非服务范围：</b>不含全屋保洁；不含医疗护理；不接猛犬/烈性传染病宠物。</li>
+                <li><b>财产安全：</b>建议安装监控并收好贵重物品，若无监控证据，平台与服务者不承担财产丢失责任。</li>
+                <li><b>健康免责：</b>宠物原有疾病、年老或不可抗力导致的意外，服务者不承担责任。</li>
+                <li><b>退改规则：</b>服务开始前规定时间内取消可全额退款，临时取消可能扣除空单费。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 8. 底部吸底栏 -->
+    <div class="footer-bar">
+        <div class="kf-btn">
+            <span class="kf-icon">💬</span>
+            <span>客服咨询</span>
+        </div>
+        <button class="book-btn">立即预约</button>
+    </div>
+
+    <script>
+        function switchTab(index) {
+            var tabs = document.querySelectorAll('.tab-item');
+            var contents = document.querySelectorAll('.tab-content');
+            
+            for(var i=0; i<tabs.length; i++){
+                tabs[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+            
+            tabs[index].classList.add('active');
+            document.getElementById('c'+index).classList.add('active');
+        }
+    </script>
+</body>
+</html>
